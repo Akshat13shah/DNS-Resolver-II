@@ -46,6 +46,8 @@ while True:
     cstm_hdr = pkt[:8]
     dns_pkt_bytes = pkt[8:]
 
+    start_server_time = time.time()
+
     # Decode custom header
     try:
         cstm_hdr_str = cstm_hdr.decode()
@@ -86,6 +88,10 @@ while True:
     rtt = 0
     total_time = 0
     cache_status = "MISS"
+    
+    end_server_time = time.time()
+    rtt = (end_server_time - start_server_time) * 1000  # in ms
+    total_time = rtt  # for single-step resolution
 
     # Append to CSV
     with open(log_file, "a", newline="") as f:
