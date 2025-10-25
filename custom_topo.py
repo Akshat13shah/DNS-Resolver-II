@@ -3,6 +3,15 @@ from mininet.net import Mininet
 from mininet.link import TCLink
 from mininet.cli import CLI
 from mininet.log import setLogLevel
+from mininet.node import OVSController
+import csv
+import time
+
+log_file = "dns_log.csv"
+with open(log_file, "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerow(["Timestamp","Domain","ResolutionMode","DNS_Server_IP","Step","Response","RTT","TotalTime","CacheStatus"])
+
 
 class CustomTopo(Topo):
     def build(self):
@@ -33,13 +42,12 @@ class CustomTopo(Topo):
 
 def run():
     topo = CustomTopo()
-    net = Mininet(topo=topo, link=TCLink)
+    net = Mininet(topo=topo, link=TCLink, controller=OVSController)
     net.start()
     print("*** Testing network connectivity ***")
     net.pingAll()
     CLI(net)
     net.stop()
-
 if __name__ == '__main__':
     setLogLevel('info')
     run()
